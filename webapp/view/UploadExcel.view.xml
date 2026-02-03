@@ -4,7 +4,7 @@
     xmlns="sap.m"
     xmlns:u="sap.ui.unified"
 >
-    <Page title="Excel Upload ">
+    <Page title="Excel Upload">
         <content>
             <u:FileUploader
                 id="fileUploader"
