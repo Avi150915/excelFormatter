@@ -1,0 +1,90 @@
+<core:FragmentDefinition
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        contentWidth="30%"
+        id="dialog"
+        title="Info"
+        type="Standard"
+        contentHeight="80%"
+    
+    >
+        <content>
+           
+                <f:SimpleForm
+                    id="userFormID"
+                    editable="true"
+                    layout="ResponsiveGridLayout"
+                    labelSpanXL="4"
+                    labelSpanL="3"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="0"
+                    emptySpanL="4"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsXL="2"
+                    columnsL="1"
+                    columnsM="1"
+                    singleContainerFullSize="true"
+                >
+                    <f:content>
+                        <Label text="EID" />
+                        <Input
+                          
+                            value="{JSONModelData>EID}"
+                        />
+
+                        <Label text="FullName" />
+                        <Input
+
+                            value="{JSONModelData>FullName}"
+                        />
+                        <Label text="EmailAddress" />
+                        <Input
+                           
+                            value="{JSONModelData>EmailAdress}"
+                        />
+                        <Label text="Vendor ID" />
+                        <Input
+
+                            value="{JSONModelData>VendorId}"
+                        />
+                        <Label text="Vendor Name" />
+                        <Input
+                            
+                            value="{JSONModelData>VendorName}"
+                        />
+                        <Label text="Org Id" />
+                        <Input
+
+                            value="{JSONModelData>OrgID}"
+                        />
+                        <Label text="Login ID" />
+                                                <Input
+
+                            value="{JSONModelData>LogonId}"
+                        />
+                    </f:content>
+                </f:SimpleForm>
+           
+        </content>
+        <beginButton>
+            <Button
+                text="Save"
+                press="onCloseDialog"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="Cancel"
+                press="onCloseDialog"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

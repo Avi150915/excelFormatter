@@ -1,0 +1,108 @@
+<mvc:View
+    controllerName="uploadexcel.controller.UploadExcel"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified"
+>
+    <Page title="Excel Upload">
+        <content>
+            <u:FileUploader
+                id="fileUploader"
+                buttonText="EntraData"
+                fileType="xlsx,xls,csv"
+                change="onFileChange"
+                uploadOnChange="false"
+                class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
+            />
+            <u:FileUploader
+                id="fileUploader2"
+                visible="false"
+                buttonText="ContractorData"
+                fileType="xlsx,xls"
+                change="onFileChange"
+                uploadOnChange="false"
+                class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
+            />
+            <Button
+            visible="true"
+                press="onValidate"
+                text="Validate"
+                class= "sapUiTinyMarginBegin"
+            />
+            <Button
+                press="onVal"
+                visible="false"
+                text="New user data"
+                class= "sapUiTinyMarginBegin"
+            />
+             <Button
+                icon="sap-icon://arrow-bottom"
+                press="onSaveData"
+                visible="false"
+                class= "sapUiTinyMarginBegin"
+              
+            />
+            <Table
+                sticky="ColumnHeaders"
+                fixedLayout="false"
+                id="excelDataTable"
+                items="{JSONModelData>/extContr}"
+                growing="true"
+                class="sapUiSmallMarginTop"
+                mode="SingleSelectMaster"
+                selectionChange="onSelectListItm"
+            >
+            <headerToolbar>
+			<OverflowToolbar>
+				<Title text="Contractor(s):{JSONModelData>/extContr/length}" level="H2"/>
+				<ToolbarSpacer/>
+                <SearchField/>
+				<Button icon="sap-icon://arrow-bottom" press="onExport"/>
+				
+			</OverflowToolbar>
+		</headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="Person ID" />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="EID"/>
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="FullName" />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="EmailAddress"   />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="Vendor ID" />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="Vendor Name"   />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="OrgID" />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="LogonId"   />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{EmployeeID}" />
+                            <Label text="{JSONModelData>EID}"  wrapping="false" />
+                            <Text text="{JSONModelData>FullName}" />
+                             <Text text="{JSONModelData>EmailAdress}" />
+                            <Text text="{JSONModelData>VendorId}" />
+                            <Text text="{JSONModelData>VendorName}" />
+                              <Text text="{JSONModelData>OrgID}" />
+                                <Text text="{JSONModelData>LogonId}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        
+        </content>
+    </Page>
+</mvc:View>
