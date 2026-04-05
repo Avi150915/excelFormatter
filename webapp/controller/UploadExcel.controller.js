@@ -32,12 +32,12 @@ sap.ui.define([
                     excelData = XLSX.utils.sheet_to_row_object_array(
                         workbook.Sheets[firstSheetName]
                     );
-                    that.excelDataFirst = excelData
-                    // if (ID === "fileUploader") {
-                    //     that.excelDataFirst = excelData
-                    // } else {
-                    //     that.excelDataSecond = excelData
-                    // }
+                    // that.excelDataFirst = excelData
+                    if (ID === "fileUploader") {
+                        that.excelDataFirst = excelData
+                    } else {
+                        that.excelDataSecond = excelData
+                    }
 
                     // Map Excel headers to model properties (if necessary)
                     // For example, if Excel header is 'Emp ID', map to 'EmployeeID'
@@ -113,6 +113,130 @@ sap.ui.define([
 
 
         },
+        onValidate2: function () {
+            sap.ui.core.BusyIndicator.show()
+            var Newcontractor = [];
+            var EntraaData = this.excelDataFirst
+            var contractorData = this.excelDataSecond
+           
+            var that = this;
+            setTimeout(function(){
+                 
+                 EntraaData.map(function(EntObj){
+                console.log(EntObj)
+                debugger;
+                
+                contractorData.map(function(contObj){
+                    if(EntObj.LogonId === contObj.UserPrincipalName){
+                        if (!((String(EntObj.OrgID) === contObj.ObjectID) && (EntObj.VendorId === "00" + contObj.Supplier ) && (EntObj.VendorName.trim() === contObj.VendorName.trim()))) {
+                                console.log("update recond")
+                            var Obj = {
+                                PersonId: contObj.PersonID,
+                                EID: EntObj.EID,
+                                FullName: EntObj.FullName,
+                                EmailAdress: EntObj.EmailAdress,
+                                VendorName: EntObj.VendorName,
+                                VendorId: EntObj.VendorId,
+                                DeletedOn: "",
+                                OrgID: EntObj.OrgID ,
+                                LogonId: EntObj.LogonId,
+
+
+
+
+
+
+                            };
+                            Newcontractor.push(Obj);
+
+                        }
+
+                    }
+                })
+                //  for (var j = 0; j < contractorData.length; j++) {
+
+                //     if (EntObj.LogonId === contractorData[j].UserPrincipalName) {
+                //         if (!(String(EntObj.OrgID) === contractorData[j].ObjectID) && (EntObj.Supplier === "00" + contractorData[j].Supplier ) && (EntObj.VendorName === contractorData[j].VendorName)) {
+                //                 console.log("update recond")
+                //             var Obj = {
+                //                 PersonId: contractorData[j].PersonID,
+                //                 EID: EntObj.EID,
+                //                 FullName: EntObj.FullName,
+                //                 EmailAdress: EntObj.EmailAdress,
+                //                 VendorName: EntObj.VendorName,
+                //                 VendorId: EntObj.VendorId,
+                //                 DeletedOn: "",
+                //                 OrgID: (EntObj.OrgID !== "" && EntObj.OrgID !== undefined) ? EntObj.OrgID.split("-")[0] : "",
+                //                 LogonId: EntObj.LogonId,
+
+
+
+
+
+
+                //             };
+                //             Newcontractor.push(Obj);
+
+                //         }
+
+                //     }
+
+
+                // }
+               
+            })
+           
+            var JSONModel = new sap.ui.model.json.JSONModel();
+            JSONModel.setSizeLimit(Newcontractor.length);
+            JSONModel.setData({
+                extContr: Newcontractor
+            })
+            pageThat.getView().setModel(JSONModel, "JSONModelData")
+              alert("Map completed")
+            },2000)
+          
+            // for (var i = 0; i < EntraaData.length; i++) {
+             
+            //     // that.processChunk(0, contractorData.length, contractorData, EntraaData[i]);
+            //     for (var j = 0; j < contractorData.length; j++) {
+
+            //         if (EntraaData[i].LogonId === contractorData[j].UserPrincipalName) {
+            //             if (!(String(EntraaData[i].OrgID) === contractorData[j].ObjectID) && (EntraaData[i].Supplier === "00" + contractorData[j].Supplier ) && (EntraaData[i].VendorName === contractorData[j].VendorName)) {
+
+            //                 var Obj = {
+            //                     PersonId: contractorData[j].PersonID,
+            //                     EID: EntraaData[i].EID,
+            //                     FullName: EntraaData[i].FullName,
+            //                     EmailAdress: EntraaData[i].EmailAdress,
+            //                     VendorName: EntraaData[i].VendorName,
+            //                     VendorId: EntraaData[i].VendorId,
+            //                     DeletedOn: "",
+            //                     OrgID: (EntraaData[i].OrgID !== "" && EntraaData[i].OrgID !== undefined) ? EntraaData[i].OrgID.split("-")[0] : "",
+            //                     LogonId: EntraaData[i].LogonId,
+
+
+
+
+
+
+            //                 };
+            //                 Newcontractor.push(Obj);
+
+            //             }
+
+            //         }
+
+
+            //     }
+
+
+
+            // }
+            sap.ui.core.BusyIndicator.hide()
+            console.log(Newcontractor);
+
+
+        },
         onValidate: function () {
             var Newcontractor = [];
 
@@ -127,7 +251,7 @@ sap.ui.define([
                     VendorName: EntraaData[i].Company,
                     VendorId: EntraaData[i].OfficeLocation !== "" ? EntraaData[i].OfficeLocation.split("|")[0] : "",
                     DeletedOn: "",
-                    OrgID: EntraaData[i].Department !== "" ? EntraaData[i].Department.split("-")[0] : "",
+                    OrgID: (EntraaData[i].Department !== "" && EntraaData[i].Department !== undefined) ? EntraaData[i].Department.split("-")[0] : "",
                     LogonId: EntraaData[i].UserPrincipalName,
 
 
@@ -240,10 +364,10 @@ sap.ui.define([
                 oSheet.destroy();
             });
         },
-        onCloseDialog:function(oEvent){
-            
+        onCloseDialog: function (oEvent) {
 
-            if(pageThat.oDialog){
+
+            if (pageThat.oDialog) {
                 pageThat.oDialog.close();
             }
 
@@ -255,17 +379,17 @@ sap.ui.define([
                 that.pDialog = that.loadFragment({
                     name: "uploadexcel.fragment.Dialog",
                     id: "diologId",
-                    Controller:pageThat
+                    Controller: pageThat
                 });
             }
             pageThat.pDialog.then(function (oDialog) {
-                pageThat.oDialog=oDialog
+                pageThat.oDialog = oDialog
                 that.getView().addDependent(oDialog);
                 oDialog.open();
                 const sControlId = "userFormID";
                 const oFormInput = that.byId(sap.ui.core.Fragment.createId("diologId", sControlId));
-         
-                oFormInput.bindElement({path: spath, model: "JSONModelData"})
+
+                oFormInput.bindElement({ path: spath, model: "JSONModelData" })
 
 
             });

@@ -4,7 +4,7 @@
     xmlns="sap.m"
     xmlns:u="sap.ui.unified"
 >
-    <Page title="Excel Upload">
+    <Page>
         <content>
             <u:FileUploader
                 id="fileUploader"
@@ -16,17 +16,23 @@
             />
             <u:FileUploader
                 id="fileUploader2"
-                visible="false"
+                visible="true"
                 buttonText="ContractorData"
-                fileType="xlsx,xls"
+                fileType="xlsx,xls,csv"
                 change="onFileChange"
                 uploadOnChange="false"
                 class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
             />
-            <Button
+              <Button
             visible="true"
                 press="onValidate"
-                text="Validate"
+                text="Create Templete"
+                class= "sapUiTinyMarginBegin"
+            />
+            <Button
+            visible="true"
+                press="onValidate2"
+                text="Update Templete"
                 class= "sapUiTinyMarginBegin"
             />
             <Button
@@ -53,13 +59,14 @@
                 selectionChange="onSelectListItm"
             >
             <headerToolbar>
-			<OverflowToolbar>
+			<Toolbar>
+
 				<Title text="Contractor(s):{JSONModelData>/extContr/length}" level="H2"/>
 				<ToolbarSpacer/>
-                <SearchField/>
-				<Button icon="sap-icon://arrow-bottom" press="onExport"/>
+                <SearchField width="30%"/>
+				<Button  icon="sap-icon://download" press="onExport"/>
 				
-			</OverflowToolbar>
+			</Toolbar>
 		</headerToolbar>
                 <columns>
                     <Column>
@@ -69,10 +76,10 @@
                         <Text text="EID"/>
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
-                        <Text text="FullName" />
+                        <Text text="Full Name" />
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
-                        <Text text="EmailAddress"   />
+                        <Text text="Email Address"   />
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
                         <Text text="Vendor ID" />
@@ -81,16 +88,16 @@
                         <Text text="Vendor Name"   />
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
-                        <Text text="OrgID" />
+                        <Text text="Org ID" />
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
-                        <Text text="LogonId"   />
+                        <Text text="Logon ID"   />
                     </Column>
                 </columns>
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="{EmployeeID}" />
+                            <Text text="{JSONModelData>PersonId}" />
                             <Label text="{JSONModelData>EID}"  wrapping="false" />
                             <Text text="{JSONModelData>FullName}" />
                              <Text text="{JSONModelData>EmailAdress}" />
