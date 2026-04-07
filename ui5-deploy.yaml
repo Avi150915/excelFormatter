@@ -4,22 +4,19 @@ specVersion: "4.0"
 metadata:
   name: uploadexcel
 type: application
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
 builder:
   resources:
     excludes:
       - /test/**
       - /localService/**
   customTasks:
-    - name: deploy-to-abap
+    - name: ui5-task-zipper
       afterTask: generateCachebusterInfo
       configuration:
-        target:
-          destination: S423_Practice_Destination
-          url: http://s4h2023.sapdemo.com:8080
-        app:
-          name: ZEXCELFORMATTER
-          description: An SAP Fiori application.
-          package: $TMP
-          transport: ''
-        exclude:
-          - /test/
+        archiveName: uploadexcel
+        relativePaths: true
+        additionalFiles:
+          - xs-app.json

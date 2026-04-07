@@ -3,8 +3,11 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:u="sap.ui.unified"
+    busy="false"
+    busyIndicatorDelay="0"
+    
 >
-    <Page>
+    <Page >
         <content>
             <u:FileUploader
                 id="fileUploader"
@@ -61,7 +64,7 @@
             <headerToolbar>
 			<Toolbar>
 
-				<Title text="Contractor(s):{JSONModelData>/extContr/length}" level="H2"/>
+				<Title text="Contractor(s) {JSONModelData>/extContr/length}" level="H2"/>
 				<ToolbarSpacer/>
                 <SearchField width="30%"/>
 				<Button  icon="sap-icon://download" press="onExport"/>

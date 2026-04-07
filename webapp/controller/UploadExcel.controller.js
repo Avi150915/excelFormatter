@@ -10,8 +10,16 @@ sap.ui.define([
         onInit() {
             pageThat = this;
             pageThat.EdmType = EdmType
+            // var appProperty = new sap.ui.model.json.JSONModel({
+            //     busy: false
+            // });
+            // pageThat.getView().setModel(appProperty, "appView")
+
         },
         onFileChange: function (oEvent) {
+
+            pageThat.getView().setBusy(true);
+
             this._import(oEvent.getParameter("files") && oEvent.getParameter("files")[0], oEvent.getSource().getId().split("--")[2]);
         },
 
@@ -38,6 +46,7 @@ sap.ui.define([
                     } else {
                         that.excelDataSecond = excelData
                     }
+                    pageThat.getView().setBusy(false);
 
                     // Map Excel headers to model properties (if necessary)
                     // For example, if Excel header is 'Emp ID', map to 'EmployeeID'
@@ -114,89 +123,89 @@ sap.ui.define([
 
         },
         onValidate2: function () {
-            sap.ui.core.BusyIndicator.show()
+
+            pageThat.getView().setBusy(true);
+
             var Newcontractor = [];
+            
             var EntraaData = this.excelDataFirst
             var contractorData = this.excelDataSecond
-           
+
             var that = this;
-            setTimeout(function(){
-                 
-                 EntraaData.map(function(EntObj){
-                console.log(EntObj)
-                debugger;
-                
-                contractorData.map(function(contObj){
-                    if(EntObj.LogonId === contObj.UserPrincipalName){
-                        if (!((String(EntObj.OrgID) === contObj.ObjectID) && (EntObj.VendorId === "00" + contObj.Supplier ) && (EntObj.VendorName.trim() === contObj.VendorName.trim()))) {
-                                console.log("update recond")
-                            var Obj = {
-                                PersonId: contObj.PersonID,
-                                EID: EntObj.EID,
-                                FullName: EntObj.FullName,
-                                EmailAdress: EntObj.EmailAdress,
-                                VendorName: EntObj.VendorName,
-                                VendorId: EntObj.VendorId,
-                                DeletedOn: "",
-                                OrgID: EntObj.OrgID ,
-                                LogonId: EntObj.LogonId,
+            setTimeout(function () {
+                var cols = EntraaData.length;
+                EntraaData.map(function (EntObj) {
+                   contractorData.map(function (contObj) {
+                        if (EntObj.LogonId === contObj.UserPrincipalName) {
+                            if (!((String(EntObj.OrgID) === contObj.ObjectID) && (EntObj.VendorId === "00" + contObj.Supplier) && (EntObj.VendorName.trim().toUpperCase() === contObj.VendorName.trim().toUpperCase()))) {
+                                // console.log("update recond")
+                                var Obj = {
+                                    PersonId: contObj.PersonID,
+                                    EID: EntObj.EID,
+                                    FullName: contObj.Completename,
+                                    EmailAdress: EntObj.EmailAdress,
+                                    VendorName: EntObj.VendorName,
+                                    VendorId: EntObj.VendorId,
+                                    DeletedOn: "",
+                                    OrgID: EntObj.OrgID,
+                                    LogonId: EntObj.LogonId,
 
 
+                                    };
+                                Newcontractor.push(Obj);
 
+                            }
 
+                            // var counter = i * cols + j + 1; // 1-based
+                            // console.log(counter, i, j)
 
-
-                            };
-                            Newcontractor.push(Obj);
 
                         }
+                    })
+                    //  for (var j = 0; j < contractorData.length; j++) {
 
-                    }
+                    //     if (EntObj.LogonId === contractorData[j].UserPrincipalName) {
+                    //         if (!(String(EntObj.OrgID) === contractorData[j].ObjectID) && (EntObj.Supplier === "00" + contractorData[j].Supplier ) && (EntObj.VendorName === contractorData[j].VendorName)) {
+                    //                 console.log("update recond")
+                    //             var Obj = {
+                    //                 PersonId: contractorData[j].PersonID,
+                    //                 EID: EntObj.EID,
+                    //                 FullName: EntObj.FullName,
+                    //                 EmailAdress: EntObj.EmailAdress,
+                    //                 VendorName: EntObj.VendorName,
+                    //                 VendorId: EntObj.VendorId,
+                    //                 DeletedOn: "",
+                    //                 OrgID: (EntObj.OrgID !== "" && EntObj.OrgID !== undefined) ? EntObj.OrgID.split("-")[0] : "",
+                    //                 LogonId: EntObj.LogonId,
+
+
+
+
+
+
+                    //             };
+                    //             Newcontractor.push(Obj);
+
+                    //         }
+
+                    //     }
+
+
+                    // }
+
                 })
-                //  for (var j = 0; j < contractorData.length; j++) {
 
-                //     if (EntObj.LogonId === contractorData[j].UserPrincipalName) {
-                //         if (!(String(EntObj.OrgID) === contractorData[j].ObjectID) && (EntObj.Supplier === "00" + contractorData[j].Supplier ) && (EntObj.VendorName === contractorData[j].VendorName)) {
-                //                 console.log("update recond")
-                //             var Obj = {
-                //                 PersonId: contractorData[j].PersonID,
-                //                 EID: EntObj.EID,
-                //                 FullName: EntObj.FullName,
-                //                 EmailAdress: EntObj.EmailAdress,
-                //                 VendorName: EntObj.VendorName,
-                //                 VendorId: EntObj.VendorId,
-                //                 DeletedOn: "",
-                //                 OrgID: (EntObj.OrgID !== "" && EntObj.OrgID !== undefined) ? EntObj.OrgID.split("-")[0] : "",
-                //                 LogonId: EntObj.LogonId,
+                var JSONModel = new sap.ui.model.json.JSONModel();
+                JSONModel.setSizeLimit(Newcontractor.length);
+                JSONModel.setData({
+                    extContr: Newcontractor
+                })
+                pageThat.getView().setModel(JSONModel, "JSONModelData")
+                pageThat.getView().setBusy(false);
+            }, 0)
 
-
-
-
-
-
-                //             };
-                //             Newcontractor.push(Obj);
-
-                //         }
-
-                //     }
-
-
-                // }
-               
-            })
-           
-            var JSONModel = new sap.ui.model.json.JSONModel();
-            JSONModel.setSizeLimit(Newcontractor.length);
-            JSONModel.setData({
-                extContr: Newcontractor
-            })
-            pageThat.getView().setModel(JSONModel, "JSONModelData")
-              alert("Map completed")
-            },2000)
-          
             // for (var i = 0; i < EntraaData.length; i++) {
-             
+
             //     // that.processChunk(0, contractorData.length, contractorData, EntraaData[i]);
             //     for (var j = 0; j < contractorData.length; j++) {
 
@@ -233,7 +242,7 @@ sap.ui.define([
 
             // }
             sap.ui.core.BusyIndicator.hide()
-            console.log(Newcontractor);
+            // console.log(Newcontractor);
 
 
         },
